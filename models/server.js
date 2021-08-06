@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 //const fileUpload = require('express-fileupload');
 
-//const { dbConnection } = require('../database/config');
+const { dbConnection } = require('../database/config');
 
 class Server {
   constructor() {
@@ -14,7 +14,7 @@ class Server {
     };
 
     // Conectar a base de datos
-    //this.conectarDB();
+    this.conectarDB();
 
     // Middlewares
     this.middlewares();
@@ -23,9 +23,9 @@ class Server {
     this.routes();
   }
 
-  /* async conectarDB() {
+  async conectarDB() {
     await dbConnection();
-  } */
+  }
 
   middlewares() {
     // CORS

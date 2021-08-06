@@ -1,38 +1,82 @@
 const { request, response } = require('express'); //es o es nesesario, pero es para obtener el tipado y las ayudas
+const bcrypt = require('bcrypt');
+
+const User = require('../models/user');
+const { paramsBuilder } = require('../helpers/paramsBuilder.js');
+const validparams = ['name', 'email', 'password', 'img', 'role'];
 
 const getUser = async (req = request, res = response) => {
-  const { q, name, page, limit } = req.query;
+  let { limit = 5, desde = 0 } = req.query;
+
+  if (isNaN(limit) === true) {
+    limit = 5;
+  }
+  if (isNaN(desde) === true) {
+    desde = 1;
+  }
+
+  const users = User.find({ state: true })
+    .skip(Number(desde))
+    .limit(Number(limit));
+  const total = User.countDocuments({ state: true });
+
+  const [resTotal, resUsers] = await Promise.all([total, users]);
 
   res.status(200).json({
-    msj: 'GET',
-    name,
-    page,
-    limit,
+    resTotal,
+    resUsers,
   });
 };
 
 const createUser = async (req = request, res = response) => {
-  const { name, edad } = req.body;
+  const params = paramsBuilder(validparams, req.body);
+  const user = new User(params);
+
+  const salt = bcrypt.genSaltSync();
+  user.password = bcrypt.hashSync(params.password, salt);
+
+  await user.save();
+
   res.status(201).json({
-    msj: 'Post',
-    name,
-    edad,
+    user,
   });
 };
 
 const updateUser = async (req = request, res = response) => {
   const { id } = req.params;
+  const { password, email, ...rest } = paramsBuilder(validparams, req.body);
+
+  if (password) {
+    const salt = bcrypt.genSaltSync();
+    rest.password = bcrypt.hashSync(password, salt);
+  }
+
+  const user = await User.findByIdAndUpdate(id, rest);
+
   res.status(200).json({
-    msj: 'Put',
-    id,
+    user,
   });
 };
 
 const deleteUser = async (req = request, res = response) => {
+  const { id } = req.params;
+
+  const user = await User.findByIdAndUpdate(id, { state: false });
   res.status(200).json({
-    msj: 'Delete',
+    user,
   });
 };
+
+/* por si algún día quiero activar el eliminado por completo
+const deleteComplitUser = async (req = request, res = response) => {
+  const { id } = req.params;
+
+  const user = await User.findOneAndDelete(id);
+
+  res.status(200).json({
+    user,
+  });
+}; */
 
 module.exports = {
   getUser,
