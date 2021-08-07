@@ -45,6 +45,13 @@ const createUser = async (req = request, res = response) => {
 const updateUser = async (req = request, res = response) => {
   const { id } = req.params;
   const { password, email, ...rest } = paramsBuilder(validparams, req.body);
+  const uid = req.userAuth.id;
+
+  if (id !== uid) {
+    return res.status(401).json({
+      msg: 'Id incorrecto',
+    });
+  }
 
   if (password) {
     const salt = bcrypt.genSaltSync();
@@ -62,6 +69,7 @@ const deleteUser = async (req = request, res = response) => {
   const { id } = req.params;
 
   const user = await User.findByIdAndUpdate(id, { state: false });
+
   res.status(200).json({
     user,
   });
