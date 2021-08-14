@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="google-signin-client_id"
-      content="895258496740-35iqa8jeenp4o27k66hfjf03favida8a.apps.googleusercontent.com"
+      content="YOUR_CLIENT_ID.apps.googleusercontent.com"
     />
     <title>Google sign-in</title>
   </head>
@@ -20,7 +20,7 @@
     <script>
       let url = window.location.hostname.includes('localhost')
         ? 'http://localhost:3000/api/auth/google'
-        : 'https://app-coffe.herokuapp.com/api/auth/google';
+        : 'https://'; //El url de su sitio publicado
 
       function onSignIn(googleUser) {
         let id_token = googleUser.getAuthResponse().id_token;
