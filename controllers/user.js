@@ -1,8 +1,8 @@
 const { request, response } = require('express'); //es o es nesesario, pero es para obtener el tipado y las ayudas
 const bcrypt = require('bcrypt');
 
-const User = require('../models/user');
-const { paramsBuilder } = require('../helpers/paramsBuilder.js');
+const { User } = require('../models');
+const { paramsBuilder } = require('../helpers');
 const validparams = ['name', 'email', 'password', 'img', 'role'];
 
 const getUser = async (req = request, res = response) => {
