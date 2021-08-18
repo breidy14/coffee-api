@@ -15,7 +15,7 @@ const existEmail = async (email = '') => {
   const existE = await User.findOne({ email });
 
   if (existE) {
-    throw new Error(`El ${email} ya existe`);
+    throw new Error(`El email: ${email} ya existe`);
   }
 };
 
@@ -23,14 +23,14 @@ const existUserByID = async (id) => {
   const existId = await User.findById(id);
 
   if (!existId) {
-    throw new Error(`El ${id} no existe`);
+    throw new Error(`El id: ${id} no existe`);
   }
 };
 
 const existCategoryBySlug = async (slug) => {
   const existCategory = await Category.findOne({ slug });
   if (!existCategory) {
-    throw new Error(`La ${slug} no existe`);
+    throw new Error(`La categoria: ${slug} no existe`);
   }
 };
 

@@ -1,6 +1,7 @@
 const { request, response } = require('express'); //es o es nesesario, pero es para obtener el tipado y las ayudas
 
 const { Category } = require('../models');
+const slugify = require('../plugins/slugify');
 
 //obtener cateorias - paginado - total - populate
 const getCategories = async (req = request, res = response) => {
@@ -91,16 +92,50 @@ const createCategory = async (req = request, res = response) => {
 
 //actualizar
 const updateCategory = async (req = request, res = response) => {
-  res.status(200).json({
-    msg: 'OK',
-  });
+  const { slug } = req.params;
+  const { name } = req.body;
+  const data = {
+    name: name.toUpperCase(),
+    slug: slugify(name),
+    user: req.userAuth._id,
+  };
+
+  try {
+    const category = await Category.findOneAndUpdate({ slug }, data, {
+      new: true,
+    });
+
+    res.status(200).json({
+      category,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      msg: `Habla con el administrador`,
+    });
+  }
 };
 
 //eliminat, - state: false
 const deleteCategory = async (req = request, res = response) => {
-  res.status(200).json({
-    msg: 'OK',
-  });
+  const { slug } = req.params;
+
+  try {
+    const category = await Category.findOneAndUpdate(
+      { slug },
+      { state: false },
+      { new: true }
+    );
+
+    res.status(200).json({
+      category,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      msg: `Habla con el administrador`,
+    });
+  }
 };
 
 module.exports = {

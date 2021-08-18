@@ -22,15 +22,14 @@ const CategorySchema = Schema({
   },
 });
 
-CategorySchema.pre('save', function () {
+CategorySchema.pre('save', function (next) {
   if (this.slug) return next();
 
   this.slug = slugify(this.name);
 });
 
 CategorySchema.methods.toJSON = function () {
-  const { __v, _id, ...category } = this.toObject();
-  category.uid = _id;
+  const { __v, state, ...category } = this.toObject();
   return category;
 };
 
