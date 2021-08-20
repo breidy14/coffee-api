@@ -1,7 +1,7 @@
 const { Schema, model } = require('mongoose');
 const slugify = require('../plugins/slugify');
 
-const CategorySchema = Schema({
+const CategorySchema = new Schema({
   name: {
     type: String,
     required: [true, 'El nombre es obligatorio'],
@@ -26,6 +26,7 @@ CategorySchema.pre('save', function (next) {
   if (this.slug) return next();
 
   this.slug = slugify(this.name);
+  next();
 });
 
 CategorySchema.methods.toJSON = function () {

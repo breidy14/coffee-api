@@ -1,4 +1,4 @@
-const { User, Role, Category } = require('../models');
+const { User, Role, Category, Product } = require('../models');
 
 const isValidRole = async (role) => {
   if (role) {
@@ -28,9 +28,24 @@ const existUserByID = async (id) => {
 };
 
 const existCategoryBySlug = async (slug) => {
-  const existCategory = await Category.findOne({ slug });
-  if (!existCategory) {
-    throw new Error(`La categoria: ${slug} no existe`);
+  /*
+  este if() es para validar si se manda la categoria,
+  esto es para que encaso de actualizar un producto, 
+  pero no querer actualizarla categoria, utilizar esta misma funcion 
+  */
+  console.log(slug);
+  if (slug) {
+    const existCategory = await Category.findOne({ slug });
+    if (!existCategory) {
+      throw new Error(`La categoria: ${slug} no existe`);
+    }
+  }
+};
+
+const existProductBySlug = async (slug) => {
+  const existProduct = await Product.findOne({ slug });
+  if (!existProduct) {
+    throw new Error(`El producto: ${slug} no existe`);
   }
 };
 
@@ -39,4 +54,5 @@ module.exports = {
   existEmail,
   existUserByID,
   existCategoryBySlug,
+  existProductBySlug,
 };

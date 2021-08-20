@@ -76,7 +76,6 @@ const createCategory = async (req = request, res = response) => {
     };
 
     const category = new Category(data);
-
     await category.save();
 
     res.status(201).json({
