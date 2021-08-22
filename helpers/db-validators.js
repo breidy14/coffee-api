@@ -33,7 +33,6 @@ const existCategoryBySlug = async (slug) => {
   esto es para que encaso de actualizar un producto, 
   pero no querer actualizarla categoria, utilizar esta misma funcion 
   */
-  console.log(slug);
   if (slug) {
     const existCategory = await Category.findOne({ slug });
     if (!existCategory) {

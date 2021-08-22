@@ -13,7 +13,7 @@ class Server {
       auth: '/api/auth',
       category: '/api/categories',
       product: '/api/products',
-      product: '/api/search',
+      search: '/api/search',
       user: '/api/users',
     };
 
