@@ -3,6 +3,7 @@ const generateJWT = require('./generateJWT');
 const googleVerify = require('./google-verify');
 const paramsBuilder = require('./paramsBuilder');
 const search = require('./search');
+const uploadFile = require('./upload-file');
 
 module.exports = {
   ...dbValidators,
@@ -10,4 +11,5 @@ module.exports = {
   ...googleVerify,
   ...paramsBuilder,
   ...search,
+  ...uploadFile,
 };

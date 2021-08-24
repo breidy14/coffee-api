@@ -7,18 +7,18 @@ const {
   searchProductsByCategory,
 } = require('../helpers');
 
-const validColection = ['categories', 'products', 'users'];
+const validCollection = ['categories', 'products', 'users'];
 
 const search = async (req = request, res = response) => {
-  const { colection, term } = req.params;
+  const { collection, term } = req.params;
 
-  if (!validColection.includes(colection)) {
+  if (!validCollection.includes(collection)) {
     return res.status(400).json({
-      msg: `Las colecciones permitidas son ${validColection}`,
+      msg: `Las colecciones permitidas son ${validcollection}`,
     });
   }
 
-  switch (colection) {
+  switch (collection) {
     case 'categories':
       const categories = await searchCategories(term);
 

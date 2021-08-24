@@ -27,6 +27,14 @@ const existUserByID = async (id) => {
   }
 };
 
+const existProductByID = async (id) => {
+  const existId = await Product.findById(id);
+
+  if (!existId) {
+    throw new Error(`El id: ${id} no existe`);
+  }
+};
+
 const existCategoryBySlug = async (slug) => {
   /*
   este if() es para validar si se manda la categoria,
@@ -48,10 +56,21 @@ const existProductBySlug = async (slug) => {
   }
 };
 
+const collectionAllowd = (collection = '', collections = []) => {
+  const valid = collections.includes(collection);
+  if (!valid) {
+    throw new Error(`La colección: ${collection} no es permitida`);
+  }
+
+  return true;
+};
+
 module.exports = {
   isValidRole,
   existEmail,
   existUserByID,
+  existProductByID,
   existCategoryBySlug,
   existProductBySlug,
+  collectionAllowd,
 };

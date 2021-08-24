@@ -27,9 +27,9 @@ router.get(
 );
 
 router.get(
-  '/:colection/:term',
+  '/:collection/:term',
   [
-    check('colection', 'la colection o categoria es obligatoria')
+    check('collection', 'la collection o categoria es obligatoria')
       .not()
       .isEmpty(),
     validarCampos,

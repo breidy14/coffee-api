@@ -15,14 +15,14 @@ const login = async (req = request, res = response) => {
 
     if (!user) {
       return res.status(400).json({
-        msg: 'Usuario o password incorectos',
+        msg: 'Usuario o password incorrectos',
       });
     }
 
     //ver si el usuario esta activo
     if (!user.state) {
       return res.status(400).json({
-        msg: 'Usuario o password incorectos',
+        msg: 'Usuario o password incorrectos',
       });
     }
     //verificar contraseña
@@ -30,7 +30,7 @@ const login = async (req = request, res = response) => {
 
     if (!validpass) {
       return res.status(400).json({
-        msg: 'Usuario o password incorectos',
+        msg: 'Usuario o password incorrectos',
       });
     }
 
