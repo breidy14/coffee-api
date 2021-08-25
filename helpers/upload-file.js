@@ -1,32 +1,29 @@
-const path = require('path');
-const { v4: uuidv4 } = require('uuid');
+const cloudinary = require('cloudinary').v2;
+cloudinary.config(process.env.CLOUDINARY_URL);
 
-const uploadFile = (
-  files,
-  validExtension = ['jpg', 'png', 'jpeg', 'gif'],
-  folder = ''
-) => {
-  return new Promise((resolve, reject) => {
-    const { miFile } = files;
-    //cortar nombre
-    const nameCut = miFile.name.split('.');
-    const extension = nameCut[nameCut.length - 1];
+const uploadFile = (files, img) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const { miFile } = files;
 
-    // validar extensíon
-    if (!validExtension.includes(extension)) {
-      return reject(`Extensión ${extension} no es valida - ${validExtension}`);
-    }
+      if (img) {
+        //si vino img borrar de cloudinary
+        const nameArr = img.split('/');
+        const name = nameArr[nameArr.length - 1];
+        const [public_id] = name.split('.');
 
-    const nameTemp = uuidv4() + '.' + extension;
-    const uploadPath = path.join(__dirname, '../uploads/', folder, nameTemp);
-
-    miFile.mv(uploadPath, function (err) {
-      if (err) {
-        return reject(err);
+        cloudinary.uploader.destroy(public_id); //podriamos usar await, pero como es un proceso aparte, no hace falta esperar
       }
+      const { tempFilePath } = miFile;
+      const { secure_url } = await cloudinary.uploader.upload(tempFilePath);
 
-      resolve(nameTemp);
-    });
+      resolve(secure_url);
+    } catch (error) {
+      reject({
+        msg: 'Algo paso con cloudinary',
+        error,
+      });
+    }
   });
 };
 

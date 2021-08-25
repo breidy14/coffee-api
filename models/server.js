@@ -3,7 +3,7 @@ const cors = require('cors');
 const fileUpload = require('express-fileupload');
 
 const { dbConnection } = require('../database/config');
-
+const { createAdmin, createRoles } = require('../helpers/initialSetup');
 class Server {
   constructor() {
     this.app = express();
@@ -13,6 +13,7 @@ class Server {
       auth: '/api/auth',
       category: '/api/categories',
       product: '/api/products',
+      role: '/api/roles',
       search: '/api/search',
       user: '/api/users',
       uploads: '/api/uploads',
@@ -20,6 +21,9 @@ class Server {
 
     // Conectar a base de datos
     this.conectarDB();
+
+    // set inicial
+    this.initialSetup();
 
     // Middlewares
     this.middlewares();
@@ -30,6 +34,11 @@ class Server {
 
   async conectarDB() {
     await dbConnection();
+  }
+
+  async initialSetup() {
+    await createRoles();
+    await createAdmin();
   }
 
   middlewares() {
@@ -57,6 +66,7 @@ class Server {
     this.app.use(this.paths.auth, require('../routes/auth_routes'));
     this.app.use(this.paths.category, require('../routes/categories_routes'));
     this.app.use(this.paths.product, require('../routes/products_routes'));
+    this.app.use(this.paths.role, require('../routes/roles_routes'));
     this.app.use(this.paths.search, require('../routes/search_routes'));
     this.app.use(this.paths.user, require('../routes/user_routes'));
     this.app.use(this.paths.uploads, require('../routes/uploads_routes'));

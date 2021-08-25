@@ -3,7 +3,7 @@ const { User, Role, Category, Product } = require('../models');
 const isValidRole = async (role) => {
   if (role) {
     // esta validación es por si se llama esta func desde el metodo PUT, no sea necesario enviar el role
-    const existRole = await Role.findOne({ role });
+    const existRole = await Role.findById(role);
 
     if (!existRole) {
       throw new Error(`El ${role} no es registrado en la BD`);

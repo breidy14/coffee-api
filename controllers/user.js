@@ -1,9 +1,9 @@
 const { request, response } = require('express'); //es o es nesesario, pero es para obtener el tipado y las ayudas
 const bcrypt = require('bcrypt');
 
-const { User } = require('../models');
-const { paramsBuilder } = require('../helpers');
-const validparams = ['name', 'email', 'password', 'img', 'role'];
+const { User, Role } = require('../models');
+const { paramsBuilder, uploadFile } = require('../helpers');
+const validparams = ['name', 'email', 'password'];
 
 const getUser = async (req = request, res = response) => {
   let { limit = 5, desde = 0 } = req.query;
@@ -30,16 +30,29 @@ const getUser = async (req = request, res = response) => {
 
 const createUser = async (req = request, res = response) => {
   const params = paramsBuilder(validparams, req.body);
-  const user = new User(params);
 
-  const salt = bcrypt.genSaltSync();
-  user.password = bcrypt.hashSync(params.password, salt);
+  try {
+    const user = new User(params);
 
-  await user.save();
+    const salt = bcrypt.genSaltSync();
+    user.password = bcrypt.hashSync(params.password, salt);
 
-  res.status(201).json({
-    user,
-  });
+    if (req.files.miFile) {
+      const secure_url = await uploadFile(req.files);
+      user.img = secure_url;
+    }
+
+    await user.save();
+
+    res.status(201).json({
+      user,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      msg: `Algo salio mal, habla con el administrador`,
+    });
+  }
 };
 
 const updateUser = async (req = request, res = response) => {

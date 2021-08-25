@@ -2,7 +2,7 @@ const { request, response } = require('express'); //es o es nesesario, pero es p
 
 const { Product, Category } = require('../models');
 const slugify = require('../plugins/slugify');
-const { paramsBuilder } = require('../helpers');
+const { paramsBuilder, uploadFile } = require('../helpers');
 const validParams = ['name', 'description', 'price', 'available', 'category'];
 
 //obtener productos - paginado - total - populate
@@ -83,7 +83,11 @@ const createProduct = async (req = request, res = response) => {
 
     const product = new Product(data);
 
-    console.log(product);
+    if (req.files.miFile) {
+      const secure_url = await uploadFile(req.files);
+      product.img = secure_url;
+    }
+
     await product.save();
 
     res.status(201).json({

@@ -4,7 +4,7 @@ const { check } = require('express-validator');
 //middlewares
 const { validarCampos, validJWT, isAdmin, hasRole } = require('../middlewares');
 
-const { isValidRole, existEmail, existUserByID } = require('../helpers/');
+const { existEmail, existUserByID } = require('../helpers/');
 
 const {
   getUser,
@@ -27,8 +27,6 @@ router.post(
     check('password', 'La contraseña debe ser de 8 o más caracteres').isLength({
       min: 8,
     }),
-    check('role', 'Rol obligatorio').not().isEmpty(), //esta validación es para que el rolo sea obligatorio al crear un nuevo user,
-    check('role').custom(isValidRole),
     validarCampos,
   ],
   createUser
@@ -41,7 +39,6 @@ router.put(
     hasRole('ADMIN_ROLE'),
     check('id', 'No es un ID válido').isMongoId(),
     check('id').custom(existUserByID),
-    check('role').custom(isValidRole),
     validarCampos,
   ],
   updateUser
