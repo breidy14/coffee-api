@@ -17,6 +17,8 @@ class Server {
       search: '/api/search',
       user: '/api/users',
       uploads: '/api/uploads',
+      tables: '/api/tables',
+      orders: '/api/orders',
     };
 
     // Conectar a base de datos
@@ -70,6 +72,8 @@ class Server {
     this.app.use(this.paths.search, require('../routes/search_routes'));
     this.app.use(this.paths.user, require('../routes/user_routes'));
     this.app.use(this.paths.uploads, require('../routes/uploads_routes'));
+    this.app.use(this.paths.tables, require('../routes/tables_routes'));
+    this.app.use(this.paths.orders, require('../routes/orders_routes'));
   }
 
   listen() {

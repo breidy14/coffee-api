@@ -9,7 +9,7 @@ const {
   deleteCategory,
 } = require('../controllers/categories');
 
-const { validarCampos, validJWT, hasRole } = require('../middlewares');
+const { validarCampos, validJWT, hasRole, isAdmin } = require('../middlewares');
 const { existCategoryBySlug } = require('../helpers');
 
 const router = Router();
@@ -27,7 +27,7 @@ router.post(
   '/',
   [
     validJWT,
-    hasRole('ADMIN_ROLE'),
+    hasRole('ADMIN_ROLE', 'SALE_ROLE'),
     check('name', 'el nombre es obligatorio es obligatorio').not().isEmpty(),
     validarCampos,
   ],
@@ -38,7 +38,7 @@ router.put(
   '/:slug',
   [
     validJWT,
-    hasRole('ADMIN_ROLE'),
+    hasRole('ADMIN_ROLE', 'SALE_ROLE'),
     check('slug').custom(existCategoryBySlug),
     validarCampos,
   ],
@@ -46,12 +46,7 @@ router.put(
 );
 router.delete(
   '/:slug',
-  [
-    validJWT,
-    hasRole('ADMIN_ROLE'),
-    check('slug').custom(existCategoryBySlug),
-    validarCampos,
-  ],
+  [validJWT, isAdmin, check('slug').custom(existCategoryBySlug), validarCampos],
   deleteCategory
 );
 

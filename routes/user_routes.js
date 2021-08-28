@@ -36,7 +36,6 @@ router.put(
   '/:id',
   [
     validJWT,
-    hasRole('ADMIN_ROLE'),
     check('id', 'No es un ID válido').isMongoId(),
     check('id').custom(existUserByID),
     validarCampos,

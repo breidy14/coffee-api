@@ -25,7 +25,7 @@ const createRole = async (req = request, res = response) => {
   const { role } = req.body;
 
   try {
-    //verificando si hay una categoria con ese nombre
+    //verificando si hay un role con ese nombre
     const roleDB = await Role.findOne({ role });
     if (roleDB) {
       return res.status(400).json({

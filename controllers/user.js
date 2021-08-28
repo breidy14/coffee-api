@@ -1,7 +1,7 @@
-const { request, response } = require('express'); //es o es nesesario, pero es para obtener el tipado y las ayudas
+const { request, response } = require('express'); //esto no es nesesario, pero es para obtener el tipado y las ayudas
 const bcrypt = require('bcrypt');
 
-const { User, Role } = require('../models');
+const { User } = require('../models');
 const { paramsBuilder, uploadFile } = require('../helpers');
 const validparams = ['name', 'email', 'password'];
 
